@@ -189,6 +189,21 @@ CHTC:
             value: "OSGVO"
           GLIDEIN_ResourceName:
             value: "CHTC-canary2"
+          # kick off jobs that use too much disk
+          # based on "use POLICY:PREEMPT_IF_MEMORY_EXCEEDED but with disk"
+          Disk_Exceeded:
+            value: "(JobUniverse != 13 && DiskUsage =!= UNDEFINED && DiskUsage > Disk)"
+            type: "expr"
+          PREEMPT:
+            value: "$(Disk_Exceeded) || $(PREEMPT:false)"
+            type: "expr"
+          MAXJOBRETIREMENTTIME:
+            value: "ifThenElse( $(Disk_Exceeded), -1, $(MAXJOBRETIREMENTTIME:0) )"
+            type: "expr"
+          WANT_SUSPEND:
+            value: "( $(Disk_Exceeded) =!= true ) && $(WANT_SUSPEND:true)"
+            type: "expr"
+
 
 OSG_DELL_M420_ASU:
   hosted-ce20.opensciencegrid.org:
