@@ -203,6 +203,15 @@ CHTC:
           WANT_SUSPEND:
             value: "( $(Disk_Exceeded) =!= true ) && $(WANT_SUSPEND:true)"
             type: "expr"
+          # be aggressive about checking disk usage
+          STARTER_UPDATE_INTERVAL:
+            # down from 5 minutes to 3 minutes
+            value: "180"
+            type: "expr"
+          STARTER_UPDATE_INTERVAL_TIMESLICE:
+            # up from 10% to 30%
+            value: "0.3"
+            type: "expr"
 
 
 OSG_DELL_M420_ASU:
